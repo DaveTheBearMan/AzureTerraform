@@ -16,6 +16,11 @@ variable "prefix" {
   default   = "tfvmcp" // Terraform Virtual Machine Competition
 }
 
+variable "vm_size" {
+  type    = string
+  default = "Standard_DS1_v2"
+}
+
 // Infastructure
 variable "ubuntu_image_properties" {
   type = object({

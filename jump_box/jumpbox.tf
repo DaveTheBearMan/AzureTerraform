@@ -3,6 +3,15 @@ resource "azurerm_public_ip" "competition_box_ip" {
   resource_group_name = var.resource_group_name
   location            = var.resource_group_location
   allocation_method   = "Dynamic"
+
+  tags = {
+    ApplicationName           = "Ubuntu Server SSH Jump Box and Ansible Host Public IP"
+    DataClassification        = "Internal"
+    Criticality               = "High"
+    BusinessUnit              = "Shared"
+    OpsCommitment             = "Platform operations"
+    OpsTeam                   = "Central IT"
+  }
 }
 
 // Establish a NIC
@@ -16,6 +25,15 @@ resource "azurerm_network_interface" "jumpbox_nic" {
     subnet_id                     = var.internal_subnet_id
     private_ip_address_allocation = "Dynamic"
     public_ip_address_id          = azurerm_public_ip.competition_box_ip.id
+  }
+
+  tags = {
+    ApplicationName           = "Ubuntu Server SSH Jump Box and Ansible Network Card"
+    DataClassification        = "Internal"
+    Criticality               = "High"
+    BusinessUnit              = "Shared"
+    OpsCommitment             = "Platform operations"
+    OpsTeam                   = "Central IT"
   }
 }
 
@@ -58,5 +76,14 @@ resource "azurerm_virtual_machine" "main" {
   }
   os_profile_linux_config {
     disable_password_authentication = false
+  }
+
+  tags = {
+    ApplicationName           = "Ubuntu Server SSH Jump Box and Ansible Virtual Machine"
+    DataClassification        = "Internal"
+    Criticality               = "High"
+    BusinessUnit              = "Shared"
+    OpsCommitment             = "Platform operations"
+    OpsTeam                   = "Central IT"
   }
 }

@@ -36,6 +36,11 @@ variable "admin_credentials" {
     }
 }
 
+variable "vm_size" {
+  type    = string
+  default = "Standard_B1ms"
+}
+
 // Network configuration
 variable "internal_subnet_id" {
   type    = string

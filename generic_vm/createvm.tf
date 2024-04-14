@@ -3,6 +3,15 @@ resource "azurerm_public_ip" "general_vm_public_ip" {
   resource_group_name = var.resource_group_name
   location            = var.resource_group_location
   allocation_method   = "Dynamic"
+
+  tags = {
+    ApplicationName           = "Generic Ubuntu Server Public IP"
+    DataClassification        = "General"
+    Criticality               = "Low"
+    BusinessUnit              = "Shared"
+    OpsCommitment             = "Baseline Only"
+    OpsTeam                   = "Central IT"
+  }
 }
 
 // Establish a NIC
@@ -16,6 +25,15 @@ resource "azurerm_network_interface" "generic_nic" {
     subnet_id                     = var.internal_subnet_id
     private_ip_address_allocation = "Dynamic"
     public_ip_address_id          = azurerm_public_ip.general_vm_public_ip.id
+  }
+
+  tags = {
+    ApplicationName           = "Generic Network Interface"
+    DataClassification        = "General"
+    Criticality               = "Low"
+    BusinessUnit              = "Shared"
+    OpsCommitment             = "Baseline Only"
+    OpsTeam                   = "Central IT"
   }
 }
 
@@ -31,7 +49,7 @@ resource "azurerm_virtual_machine" "main" {
   location              = var.resource_group_location
   resource_group_name   = var.resource_group_name
   network_interface_ids = [azurerm_network_interface.generic_nic.id]
-  vm_size               = "Standard_B1ms"
+  vm_size               = var.vm_size
 
   # Uncomment this line to delete the OS disk automatically when deleting the VM
   delete_os_disk_on_termination = true
@@ -58,5 +76,14 @@ resource "azurerm_virtual_machine" "main" {
   }
   os_profile_linux_config {
     disable_password_authentication = false
+  }
+
+  tags = {
+    ApplicationName           = "Generic Ubuntu Server VM"
+    DataClassification        = "General"
+    Criticality               = "Low"
+    BusinessUnit              = "Shared"
+    OpsCommitment             = "Baseline Only"
+    OpsTeam                   = "Central IT"
   }
 }
