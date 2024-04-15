@@ -86,3 +86,51 @@ output "WindowsSecurity" {
 ```
 
 You'll notice that included in the output for a virtual network is the existing firewall configurations. This is because with so few present firewall configurations, it would not provide an exceptional benefit to seperate a firewall file. As the project grows however, this path will certainly be persued. 
+
+# JumpBox
+Below is example code that would create a resource group, a virtual network and a subnet to place both VMs in. Further, it would then assign a public IP to one of the boxes to accept incoming network traffic, while denying outside connection to the inside box. This could easily be scaled up by increasing count to however many VMs was required, but, this should only be done to a certain point and for good reason as there is a seperate resource for creating mass VMs all of the same type, with less overhead.
+```tf
+# Module blocks
+module "storage" {
+  source                        = "./storage"
+
+  // Resource Group
+  resource_group_name           = var.resource_group_name
+  resource_group_location       = var.resource_group_location
+}
+
+module "network" {
+  source                        = "./network"
+
+  // Resource Group
+  resource_group_name           = module.storage.resource_group_name
+  resource_group_location       = module.storage.resource_group_location
+}
+
+module "jump_box" {
+  source                        = "./jump_box"
+
+  // Resource group
+  resource_group_name           = module.storage.resource_group_name
+  resource_group_location       = module.storage.resource_group_location
+
+  // Network
+  network_interface_id          = module.network.virtual_network
+  internal_subnet_id            = module.network.internal_subnet
+  network_security_group_id     = module.network.SSHSecurity
+}
+
+module "internal_vm" {
+  source                        = "./internal_vm"
+  count                         = 1
+
+  // Resource group
+  resource_group_name           = module.storage.resource_group_name
+  resource_group_location       = module.storage.resource_group_location
+
+  // Network
+  network_interface_id          = module.network.virtual_network
+  internal_subnet_id            = module.network.internal_subnet
+  network_security_group_id     = module.network.InternalSecurity
+}
+```
