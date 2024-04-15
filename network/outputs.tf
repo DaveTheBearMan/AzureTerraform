@@ -18,6 +18,6 @@ output "MailSecurity" {
   value = azurerm_network_security_group.MailServer.id
 }
 
-output "WindowsFirewall" {
+output "WindowsSecurity" {
   value = azurerm_network_security_group.WindowsFirewall.id
 }
