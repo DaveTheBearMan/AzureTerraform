@@ -12,9 +12,6 @@ This repository contains the terraform I have written to make easy cloud deploym
     1. [Deploying a network](#Network)
 3. VM Deployment
     1. [Deploy a jump box.](#Jumpbox)
-    2. [Deploy a email server.](#EmailServer)
-    3. [Deploy arbitrary VMs without grouping](#UbuntuServers)
-4. [Main Configuration](#MainConfig)
 
 # ResourceGroup
 

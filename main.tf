@@ -15,29 +15,15 @@ module "network" {
   resource_group_location       = module.storage.resource_group_location
 }
 
-module "jump_box" {
-  source                        = "./jump_box"
+module "authentik" {
+  source                        = "./generic_vm"
 
-  // Resource group
+  // Crazy
+  internal_subnet_id            = module.network.internal_subnet
+  network_security_group_id     = module.network.SSOSecurity
+  network_interface_id          = module.network.virtual_network
+
+  // Resource Group
   resource_group_name           = module.storage.resource_group_name
   resource_group_location       = module.storage.resource_group_location
-
-  // Network
-  network_interface_id          = module.network.virtual_network
-  internal_subnet_id            = module.network.internal_subnet
-  network_security_group_id     = module.network.SSHSecurity
-}
-
-module "internal_vm" {
-  source                        = "./internal_vm"
-  count                         = 1
-
-  // Resource group
-  resource_group_name           = module.storage.resource_group_name
-  resource_group_location       = module.storage.resource_group_location
-
-  // Network
-  network_interface_id          = module.network.virtual_network
-  internal_subnet_id            = module.network.internal_subnet
-  network_security_group_id     = module.network.InternalSecurity
 }

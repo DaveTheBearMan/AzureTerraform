@@ -21,3 +21,7 @@ output "MailSecurity" {
 output "WindowsSecurity" {
   value = azurerm_network_security_group.WindowsFirewall.id
 }
+
+output "SSOSecurity" {
+  value = azurerm_network_security_group.Authentik.id
+}

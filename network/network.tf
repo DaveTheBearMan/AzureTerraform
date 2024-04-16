@@ -32,6 +32,24 @@ resource "azurerm_network_security_group" "SSHSecurity" {
   }
 }
 
+resource "azurerm_network_security_group" "Authentik" {
+  name                = "authentik"
+  location            = var.resource_group_location
+  resource_group_name = var.resource_group_name
+
+  security_rule {
+    name                       = "SSH"
+    priority                   = 100
+    direction                  = "Inbound"
+    access                     = "Allow"
+    protocol                   = "Tcp"
+    source_port_range          = "*"
+    destination_port_ranges    = ["22", "80", "443", "9000", "9443", "3389", "6636", "9300", "5432"]
+    source_address_prefix      = var.accept_all_range
+    destination_address_prefix = azurerm_subnet.internal.address_prefixes[0]
+  }
+}
+
 resource "azurerm_network_security_group" "InternalSecurity" {
   name                = "interalSecurityGroup"
   location            = var.resource_group_location
